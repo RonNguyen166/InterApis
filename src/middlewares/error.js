@@ -16,7 +16,7 @@ const errorConverter = (err, req, res, next) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  let { statusCode, message } = err;
+  let { statusCode, message, status } = err;
   if (process.env.NODE_ENV !== "production" && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[statusCode];
@@ -24,6 +24,7 @@ const errorHandler = (err, req, res, next) => {
   res.locals.errorMessage = message;
   const response = {
     code: statusCode,
+    status: status,
     message: message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   };
